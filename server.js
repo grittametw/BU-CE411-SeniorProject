@@ -114,9 +114,9 @@ app.get('/:id_users', function (req, res, next) {
         
                     // Retrieve color values ​​R, G, B from database
                     const skinColorRGB = { 
-                        R: results[0].color_r, 
-                        G: results[0].color_g, 
-                        B: results[0].color_b 
+                        R: results[0].R, 
+                        G: results[0].G, 
+                        B: results[0].B 
                     };
         
                     // All tone colors
