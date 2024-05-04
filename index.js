@@ -23,13 +23,13 @@ const parser = sp.pipe(new ReadlineParser({ delimiter: '\r\n' }))
 var app = express();
 app.use(express.json());
 
-app.listen(5000, function(){
-    console.log("Server listening on port: 5000")
+app.listen(3000, function(){
+    console.log("Server listening on port: 3000")
 });
 
 app.get('/', function (req, res) {
     database.query(
-      'SELECT z1_x, z1_y, z1_z, z2_x, z2_y, z2_z, z3_x, z3_y, z3_z, z4_x, z4_y, z4_z, z5_x, z5_y, z5_z, z6_x, z6_y, z6_z FROM zone ORDER BY id_zone DESC LIMIT 1',
+      'SELECT z1_x, z1_y, z1_z, z2_x, z2_y, z2_z, z3_x, z3_y, z3_z, z4_x, z4_y, z4_z, z5_x, z5_y, z5_z, z6_x, z6_y, z6_z FROM zone ORDER BY id DESC LIMIT 1',
       function(err, results) {
         if (err) {
           res.status(500).send(err.message);
@@ -92,7 +92,6 @@ app.get('/', function (req, res) {
           var z3_y1 = Y_zone3 + 20;         // เพิ่ม
           var z3_z1 = Z_zone3 -4;           // เพิ่ม
           var z3_z2 = Z_zone3 -7;           // เพิ่ม
-          var Zone3_Z = Z_zone3 - 2;
           var Z4_X_l = X_zone4 + 50;       //zone4 left cheek
           var z4_y1 = Y_zone4 + 20;         // เพิ่ม
           var z4_z1 = Z_zone4 - 4;          // เพิ่ม
@@ -158,7 +157,6 @@ app.get('/', function (req, res) {
           var Servo_left = `M280 P0 S35`
           var Servo_right = `M280 P0 S85`
           //setting time
-          var finish = `M400`  
           var delay_1500 = `G4 P1500`   
           var delay_3000 = `G4 P3000`
 
@@ -179,7 +177,6 @@ app.get('/', function (req, res) {
                 sendGCode(Servo_Center);          //set servo
                 sendGCode(HomeStart);             //x=0 y=0 z=0
 
-
             //############## Put on makeup #############
             //------process 1 Apply foundation---------
                 sendGCode(magnetic_Open);         //magnetic open
@@ -187,79 +184,62 @@ app.get('/', function (req, res) {
                 sendGCode(Z_0);                   //z=0
                 sendGCode(HomeCamera_x);          //home camera
                 sendGCode(HomeCamera_y);          //home camera
-                sendGCode(finish);
                  //Round 1 (Zone2) Apple foundation on the forehead. 
                 sendGCode(Z2_Forehead_xy);        //zone2
                 sendGCode(Z2_Forehead_z);
                 sendGCode(z2_right1);
-                sendGCode(finish); 
                 sendGCode(Servo_right);
                 sendGCode(z2_right2);
                 sendGCode(z2_right1);
-                sendGCode(finish); 
                 sendGCode(Servo_Center);
                 sendGCode(z2_left1);
-                sendGCode(finish); 
                 sendGCode(Servo_left);
                 sendGCode(z2_left2);
                 sendGCode(z2_left1);
-                sendGCode(finish); 
                 sendGCode(Servo_Center);
                 sendGCode(Z2_Forehead_z);
                 sendGCode(Z2_Forehead_xy);  
                  //Round 2 (Zone2) Apple foundation on the forehead.
                 sendGCode(z2_right1);                //zone2
-                sendGCode(finish); 
                 sendGCode(Servo_right);
                 sendGCode(z2_right2);
                 sendGCode(z2_right1);
-                sendGCode(finish); 
                 sendGCode(Servo_Center);
                 sendGCode(z2_left1);
-                sendGCode(finish); 
                 sendGCode(Servo_left);
                 sendGCode(z2_left2);
                 sendGCode(z2_left1);
-                sendGCode(finish); 
                 sendGCode(Servo_Center);
                 sendGCode(Z2_Forehead_z);
                 sendGCode(Z2_Forehead_xy);  
                 sendGCode(Z_20);                  //back z20
                  //Round 1 (Zone3) Apple foundation on the right cheek.
                 sendGCode(Z3_RightCheek_xy1);      //zone3
-                sendGCode(finish); 
                 sendGCode(Servo_right);
                 sendGCode(Z3_RightCheek_z1);
                 sendGCode(Z3_right1);
-                sendGCode(finish); 
                 sendGCode(Servo_Center);
                 //Round 2 (Zone3) Apple foundation on the right cheek.
                 sendGCode(Z_20);                  //back z20
                 sendGCode(Z3_RightCheek_xy1);      //zone3
-                sendGCode(finish); 
                 sendGCode(Servo_right);
                 sendGCode(Z3_RightCheek_z1);
                 sendGCode(Z3_right1);
-                sendGCode(finish); 
                 sendGCode(Servo_Center);
                 sendGCode(Z_20);                  //back z20
 //add
                  //Round 1 (Zone3) Apple foundation on the right cheek.
                  sendGCode(Z3_RightCheek_xy2);      //zone3
-                 sendGCode(finish); 
                  sendGCode(Servo_right);
                  sendGCode(Z3_RightCheek_z2);
                  sendGCode(Z3_right2);
-                 sendGCode(finish); 
                  sendGCode(Servo_Center);
                  //Round 2 (Zone3) Apple foundation on the right cheek.
                  sendGCode(Z_20);                  //back z20
                  sendGCode(Z3_RightCheek_xy2);      //zone3
-                 sendGCode(finish); 
                  sendGCode(Servo_right);
                  sendGCode(Z3_RightCheek_z2);
                  sendGCode(Z3_right2);
-                 sendGCode(finish); 
                  sendGCode(Servo_Center);
                  sendGCode(Z_20);                  //back z20
 //end
@@ -269,45 +249,35 @@ app.get('/', function (req, res) {
                 sendGCode(Z_20);                  //back z20
                 //Round 1 (Zone4) Apple foundation on the left cheek.
                 sendGCode(Z4_LeftCheek_xy1);       //zone4
-                sendGCode(finish);
                 sendGCode(Servo_left);
                 sendGCode(Z4_LeftCheek_z1)
                 sendGCode(Z4_left1);
-                sendGCode(finish);
                 sendGCode(Servo_Center);
                 sendGCode(Z_20);                  //back z20
                 //Round 2 (Zone4) Apple foundation on the left cheek. 
                 sendGCode(Z4_LeftCheek_xy1);       //zone4
-                sendGCode(finish);
                 sendGCode(Servo_left);
                 sendGCode(Z4_LeftCheek_z1)
                 sendGCode(Z4_left1);
-                sendGCode(finish);
                 sendGCode(Servo_Center);
                 sendGCode(Z_20);                  //back z20
-                sendGCode(finish);
                 sendGCode(Servo_Center);          //set servo
 
 //add
                 //Round 1 (Zone4) Apple foundation on the left cheek.
                 sendGCode(Z4_LeftCheek_xy2);       //zone4
-                sendGCode(finish);
                 sendGCode(Servo_left);
                 sendGCode(Z4_LeftCheek_z2)
                 sendGCode(Z4_left2);
-                sendGCode(finish);
                 sendGCode(Servo_Center);
                 sendGCode(Z_20);                  //back z20
                 //Round 2 (Zone4) Apple foundation on the left cheek. 
                 sendGCode(Z4_LeftCheek_xy2);       //zone4
-                sendGCode(finish);
                 sendGCode(Servo_left);
                 sendGCode(Z4_LeftCheek_z2)
                 sendGCode(Z4_left2);
-                sendGCode(finish);
                 sendGCode(Servo_Center);
                 sendGCode(Z_20);                  //back z20
-                sendGCode(finish);
                 sendGCode(Servo_Center);          //set servo
 //end
 
@@ -319,7 +289,6 @@ app.get('/', function (req, res) {
                 sendGCode(Z5_left);
                 sendGCode(Z5_right);
                 sendGCode(Z_0);                   //z=0
-                sendGCode(finish);
                 sendGCode(Servo_Start); 
                 sendGCode(Servo_Center);          //set servo
                 sendGCode(HomeStart);             //home start
@@ -338,41 +307,33 @@ app.get('/', function (req, res) {
                 sendGCode(HomeCamera_y);          //home camera
                 //Round 1
                 sendGCode(Z3_RightCheek_xy1);      //zone3
-                sendGCode(finish); 
                 sendGCode(Servo_right);
                 sendGCode(Z3_RightCheek_z_blush);
                 sendGCode(Z3_right_blush);
-                sendGCode(finish); 
                 sendGCode(Servo_Center);
                 sendGCode(Z_20);                  //back z20
                 //Round 2
                 sendGCode(Z3_RightCheek_xy1);      //zone3
-                sendGCode(finish); 
                 sendGCode(Servo_right);
                 sendGCode(Z3_RightCheek_z_blush);
                 sendGCode(Z3_right_blush);
-                sendGCode(finish); 
                 sendGCode(Servo_Center);
                 sendGCode(Z_20);                  //back z20
                 //Round 1
                 sendGCode(Z4_LeftCheek_xy1);       //zone4
-                sendGCode(finish);
                 sendGCode(Servo_left);
                 sendGCode(Z4_LeftCheek_z_blush)
                 sendGCode(Z4_left_blush);
-                sendGCode(finish);
                 sendGCode(Servo_Center);
                 sendGCode(Z_20);                  //back z20
                 //Round 2
                 sendGCode(Z4_LeftCheek_xy1);       //zone4
-                sendGCode(finish);
                 sendGCode(Servo_left);
                 sendGCode(Z4_LeftCheek_z_blush)
                 sendGCode(Z4_left_blush);
                 sendGCode(Z_20);                  //back z20
                 sendGCode(HomeCamera_x);          //home camera
                 sendGCode(HomeCamera_y);          //home camera
-                sendGCode(finish);
                 sendGCode(Servo_Start); 
                 sendGCode(Servo_Center);
                 sendGCode(X_0);                   //x=0
@@ -390,12 +351,10 @@ app.get('/', function (req, res) {
                 sendGCode(Z_0);                   //z=0
                 sendGCode(HomeCamera_x);          //home camera
                 sendGCode(HomeCamera_y);          //home camera
-                sendGCode(finish); 
                 sendGCode(Z6_Mouth_xy);           //zone6
                 sendGCode(Z6_Mouth_z);            //zone6
                 sendGCode(delay_3000);           
                 sendGCode(Z_0);                   //z=0
-                sendGCode(finish);
                 sendGCode(Servo_Start); 
                 sendGCode(Servo_Center);
                 sendGCode(X_0);                   //x=0
